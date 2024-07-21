@@ -7,7 +7,12 @@ import {Auth} from "@supabase/auth-ui-react";
 import {ThemeSupa} from "@supabase/auth-ui-shared";
 import './input.css';
 import {useUserStore} from "./zustand/userStore";
+import {MantineProvider} from "@mantine/core";
+
 import "react-toastify/dist/ReactToastify.css";
+import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
+
 
 export const supabase = createClient(import.meta.env.VITE_SUPADB_URL, import.meta.env.VITE_SUPADB_API_KEY);
 
@@ -43,9 +48,10 @@ export const App = ({children}: { children: ReactNode }) => {
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
-        <App>
-            <RouterProvider router={router}>
-            </RouterProvider>
-        </App>
+        <MantineProvider>
+            <App>
+                <RouterProvider router={router}/>
+            </App>
+        </MantineProvider>
     </React.StrictMode>
 );

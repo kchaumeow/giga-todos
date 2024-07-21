@@ -1,29 +1,32 @@
 import {GetTodoDTO, updateTodo} from "../api/todos";
-import {useState} from "react";
-import {CheckSquareFilled, PlusSquareOutlined} from "@ant-design/icons";
-import Paragraph from "antd/lib/typography/Paragraph";
+import {memo, useState} from "react";
+import {Checkbox, Text} from "@mantine/core";
+import {IconTrash} from "@tabler/icons-react";
 
 
-export const TodoItem = ({todo}: { todo: GetTodoDTO }) => {
-    const [isChecked, setIsChecked] = useState(todo.isChecked);
-    const [name, setName] = useState(todo.name);
-    // const [debouncedName] = useDebounce(name, 1000);
-    const handleCheck = () => {
-        setIsChecked(!isChecked);
-        updateTodo(todo.id, {isChecked: !todo.isChecked});
+const TodoItemComponent = ({todo, handleDelete}: { todo: GetTodoDTO, handleDelete: (id: number) => void }) => {
+    const [isChecked, setIsChecked] = useState<boolean>(todo.isChecked);
+    const handleCheck = async () => {
+        const newChecked = !isChecked;
+        await updateTodo(todo.id, {isChecked: newChecked});
+        setIsChecked(newChecked);
     };
 
-    console.log(name);
-
-    const handleNameChange = (value: string) => {
-        setName(value);
-        updateTodo(todo.id, {name: value});
-    }
-    return <div className="flex gap-1 justify-between p-2">
-        <div>
-            <Paragraph editable={{onChange: handleNameChange}}>{name}</Paragraph>
-            {todo.deadline && <div>deadline: {todo.deadline}</div>}
+    return <div
+        className="flex gap-1 justify-between p-2 border border-b-4 border-r-4 border-indigo-600 rounded shadow-md">
+        <div className="flex flex-col justify-between">
+            <Text>{todo.name}</Text>
+            {todo.deadline && <Text>deadline: {todo.deadline}</Text>}
         </div>
-        <div onClick={handleCheck}>{isChecked ? <CheckSquareFilled/> : <PlusSquareOutlined/>}</div>
+        <div className='flex flex-col gap-4 items-center '>
+            <Checkbox
+                color="violet"
+                checked={isChecked}
+                onChange={handleCheck}/>
+            <IconTrash color="red" onClick={() => handleDelete(todo.id)}/>
+        </div>
+
     </div>;
 }
+
+export const TodoItem = memo(TodoItemComponent);

@@ -1,9 +1,7 @@
 import {TodoList} from "../components/TodoList";
 
-const Home = () => {
-    return <div className="">
+export const Home = () => {
+    return <div>
         <TodoList/>
     </div>;
 }
-
-export default Home;

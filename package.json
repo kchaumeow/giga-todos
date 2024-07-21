@@ -10,15 +10,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mantine/core": "^7.11.2",
+    "@mantine/dates": "^7.11.2",
+    "@mantine/hooks": "^7.11.2",
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.44.2",
-    "antd": "^5.19.1",
+    "@tabler/icons-react": "^3.11.0",
+    "dayjs": "^1.11.12",
+    "postcss-preset-mantine": "^1.16.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.24.1",
     "react-toastify": "^10.0.5",
-    "use-debounce": "^10.0.1",
     "zustand": "^4.5.4"
   },
   "devDependencies": {

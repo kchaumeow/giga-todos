@@ -1,4 +1,5 @@
 import {supabase} from "../main";
+import {FiltersParams} from "../components/Filters";
 
 export interface CreateTodoDTO {
     id?: number; // id is optional because it will be assigned by the database
@@ -21,7 +22,7 @@ export interface UpdateTodoDTO {
     deadline?: string;
 }
 
-export async function createTodo(todo: CreateTodoDTO): Promise<CreateTodoDTO | null> {
+export async function createTodo(todo: CreateTodoDTO): Promise<CreateTodoDTO | Error> {
     const {data, error} = await supabase
         .from('todos')
         .insert(todo)
@@ -29,22 +30,42 @@ export async function createTodo(todo: CreateTodoDTO): Promise<CreateTodoDTO | n
 
     if (error) {
         console.error('Error creating todo:', error);
-        return null;
+        throw new Error(error.message);
     }
 
     return data;
 }
 
-// Read Todos
-export async function getTodosOfUser(authorId: string, sorting?: { ascending?: boolean, column: string }): Promise<GetTodoDTO[]> {
-    const ascending = sorting?.ascending || false;
-    const column = sorting?.column || "createdAt";
+function getIsCheckedValue(isChecked?: string) {
+    switch (isChecked) {
+        case "TRUE":
+            return true;
+        case "FALSE":
+            return false;
+        default:
+            return null;
+    }
+}
 
-    const {data, error} = await supabase
+// Read Todos
+export async function getTodosOfUser(authorId: string, filters?: FiltersParams): Promise<GetTodoDTO[]> {
+
+    const isChecked = getIsCheckedValue(filters?.isChecked);
+
+    const sortByDeadline = getIsCheckedValue(filters?.sortByDeadline);
+
+    const result = supabase
         .from('todos')
         .select('*')
-        .eq('authorId', authorId)
-        .order(column, {ascending: ascending})
+        .eq('authorId', authorId);
+
+    if (isChecked !== null) result.eq('isChecked', isChecked);
+
+    if (filters?.deadline) result.eq('deadline', filters.deadline);
+
+    if (sortByDeadline) result.order('deadline', {ascending: true})
+
+    const {data, error} = await result;
 
     if (error) {
         console.error('Error fetching todos:', error);

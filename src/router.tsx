@@ -1,25 +1,24 @@
-import { createBrowserRouter } from "react-router-dom";
-import Layout from "./components/Layout";
-// import NotFound from "./pages/NotFound";
-import Home from "./pages/Home";
-import NewTodo from "./pages/NewTodo";
-import Calendar from "./pages/Calendar";
+import {createBrowserRouter} from "react-router-dom";
+import {Layout} from "./components/Layout";
+import {Home} from "./pages/Home";
+import {NewTodo} from "./pages/NewTodo";
+import {Calendar} from "./pages/Calendar";
 
 export const router = createBrowserRouter([
     {
-        element: <Layout />,
+        element: <Layout/>,
         path: "/",
         children: [
             {
-                element: <Home />,
+                element: <Home/>,
                 index: true,
             },
             {
-                element: <Calendar />,
+                element: <Calendar/>,
                 path: "/calendar",
             },
             {
-                element: <NewTodo />,
+                element: <NewTodo/>,
                 path: "/todos/create",
             },
             {
