@@ -30,6 +30,7 @@ export const useFilters = (): UseFiltersResult => {
 
     const resetFilters = () => {
         const newParams = new URLSearchParams();
+        newParams.set('sortByDeadline', sortByDeadline || "");
         setSearchParams(newParams);
     }
 

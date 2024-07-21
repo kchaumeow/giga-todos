@@ -4,6 +4,7 @@ import {useUserStore} from "../zustand/userStore";
 import {useEffect, useState} from "react";
 import {Filters} from "./Filters";
 import {useFilters} from "../hooks/useFilters";
+import {Alert} from "@mantine/core";
 
 export const TodoList = () => {
     const user = useUserStore(state => state.user);
@@ -25,12 +26,17 @@ export const TodoList = () => {
         }
     }, [user, JSON.stringify(filters)]);
 
-    return <div className="w-1/2 m-auto pt-20">
+    return <div className="lg:w-1/2 m-auto pt-20 w-3/4">
         <div className="mb-10">
             <Filters/>
         </div>
 
         <div className="flex flex-col gap-4">
+            {!todos.length && <div>
+                <Alert className="mt-20" variant="light" color="violet" title="TODOS not found">
+                    Todos not found. You can add new todo to start tracking your progress.
+                </Alert>
+            </div>}
             {todos.map(todo => {
                 return <div key={todo.id}>
                     <TodoItem todo={todo} handleDelete={handleDelete}/>

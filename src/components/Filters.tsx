@@ -1,4 +1,4 @@
-import {Button, Combobox, Input, InputBase, Switch, useCombobox} from "@mantine/core";
+import {Button, Combobox, Grid, Input, InputBase, Switch, useCombobox} from "@mantine/core";
 import {useFilters} from "../hooks/useFilters";
 import {useCallback, useState} from "react";
 import {Link} from "react-router-dom";
@@ -44,7 +44,6 @@ export const Filters: React.FC = () => {
     ));
 
     const handleSwitchOrder = () => {
-        console.log(sortByDeadline);
         const newValueBoolean = sortByDeadline !== "TRUE";
         const newValueString = newValueBoolean ? "TRUE" : "FALSE";
         setSortByDeadline(newValueString);
@@ -56,71 +55,72 @@ export const Filters: React.FC = () => {
         setFilters({deadline: value?.toDateString()});
     }, [])
 
-    const handleResetFilters = useCallback(() => {
+    const handleResetFilters = () => {
         setDate(null);
-        setSortByDeadline("FALSE");
         resetFilters();
-    }, [])
+    }
 
     return (
         <div className="flex flex-col gap-5">
-            <div className="flex gap-5 items-center flex-col lg:flex-row">
-                <Combobox
-                    store={combobox}
-                    onOptionSubmit={(val) => {
-                        setFilters({isChecked: val})
-                        combobox.closeDropdown();
-                    }}
-                >
-                    <Combobox.Target>
-                        <InputBase
-                            component="button"
-                            color="violet"
-                            label="Status"
-                            type="button"
-                            className="lg:w-1/2 md:w-2/3 w-full"
-                            pointer
-                            rightSection={<Combobox.Chevron/>}
-                            rightSectionPointerEvents="none"
-                            onClick={() => combobox.toggleDropdown()}
-                        >
-                            {TODOLabel[filters.isChecked as TODOStatus] ||
-                                <Input.Placeholder>Status</Input.Placeholder>}
-                        </InputBase>
-                    </Combobox.Target>
-
-                    <Combobox.Dropdown>
-                        {options}
-                    </Combobox.Dropdown>
-                </Combobox>
-                <Switch
-                    checked={sortByDeadline === "TRUE"}
-                    onChange={handleSwitchOrder}
-                    label="Sort by deadline"
-                    color="violet"
-                    className="mt-5"
-                />
-                <Link to="/todos/create" className="mt-5">
-                    <Button
-                        variant="gradient"
-                        gradient={{from: 'violet', to: 'red', deg: 145}}
+            <Grid align="end">
+                <Grid.Col span={{base: 12, md: 6, lg: 5}}>
+                    <Combobox
+                        store={combobox}
+                        onOptionSubmit={(val) => {
+                            setFilters({isChecked: val})
+                            combobox.closeDropdown();
+                        }}
                     >
-                        Add TODO
-                    </Button>
-                </Link>
+                        <Combobox.Target>
+                            <InputBase
+                                component="button"
+                                color="violet"
+                                label="Status"
+                                type="button"
+                                pointer
+                                rightSection={<Combobox.Chevron/>}
+                                rightSectionPointerEvents="none"
+                                onClick={() => combobox.toggleDropdown()}
+                            >
+                                {TODOLabel[filters.isChecked as TODOStatus] ||
+                                    <Input.Placeholder>Status</Input.Placeholder>}
+                            </InputBase>
+                        </Combobox.Target>
 
-            </div>
-            <div className="flex items-center gap-5">
-                <div>
-                    <DateInput
-                        value={date}
-                        onChange={(e) => handleDateChange(e)}
-                        label="Choose date of deadline to see what you need to do"
-                        placeholder="Deadline"
-                    />
-                </div>
-                <Button className="mt-5" color="red" onClick={handleResetFilters}>Reset filters</Button>
-            </div>
+                        <Combobox.Dropdown>
+                            {options}
+                        </Combobox.Dropdown>
+                    </Combobox>
+                </Grid.Col>
+                <Grid.Col span={{base: 12, md: 6, lg: 5}}>
+                    <div>
+                        <DateInput
+                            value={date}
+                            onChange={(e) => handleDateChange(e)}
+                            label="Choose date of deadline"
+                            placeholder="Deadline"
+                        />
+                    </div>
+                </Grid.Col>
+                <Grid.Col span={{base: 4, md: 6, lg: 2}}>
+                    <Button color="red" onClick={handleResetFilters}>Reset
+                        filters</Button>
+                </Grid.Col>
+            </Grid>
+            <Switch
+                checked={sortByDeadline === "TRUE"}
+                onChange={handleSwitchOrder}
+                label="Sort by deadline"
+                color="violet"
+            />
+            <Link to="/todos/create" className="mt-5">
+                <Button
+                    variant="gradient"
+                    gradient={{from: 'violet', to: 'red', deg: 145}}
+                >
+                    Add TODO
+                </Button>
+            </Link>
         </div>
     );
 }
