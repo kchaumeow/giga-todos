@@ -50,9 +50,9 @@ function getIsCheckedValue(isChecked?: string) {
 // Read Todos
 export async function getTodosOfUser(authorId: string, filters?: FiltersParams): Promise<GetTodoDTO[]> {
 
-    const isChecked = getIsCheckedValue(filters?.isChecked);
+    const isChecked = getIsCheckedValue(filters?.isChecked || "");
 
-    const sortByDeadline = getIsCheckedValue(filters?.sortByDeadline);
+    const sortByDeadline = getIsCheckedValue(filters?.sortByDeadline || "");
 
     const result = supabase
         .from('todos')
